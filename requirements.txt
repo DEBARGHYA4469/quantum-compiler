@@ -1,0 +1,5 @@
+dill==0.2.7.1
+IBMQuantumExperience==1.9.1
+kdtree==0.16
+numpy==1.14.3
+qiskit==0.5.2
