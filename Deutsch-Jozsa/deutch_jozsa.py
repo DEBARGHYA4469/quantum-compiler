@@ -1,4 +1,4 @@
-#from connection import * 
+from connection import * 
 import numpy as np 
 import random 
 import matplotlib.pyplot as plt 
@@ -6,7 +6,7 @@ from qiskit import QuantumCircuit,ClassicalRegister,QuantumRegister,QuantumJob
 from qiskit import available_backends,execute,register,get_backend
 from qiskit.tools.visualization import plot_histogram,circuit_drawer
 
-#backend = get_qc() # get the quantum computer with least jobs queued up 
+backend = get_qc() # get the quantum computer with least jobs queued up 
 def flip_x(arr,binlength,l):
 	if(l == 0):
 		newstr = "" 
@@ -142,7 +142,7 @@ file.close()
 
 
 
-backend = "local_qasm_simulator"
+#backend = "local_qasm_simulator" #FOR local testing...
 shots = 1000
 job = execute(djCircuit,backend=backend,shots=shots)
 results=job.result()
