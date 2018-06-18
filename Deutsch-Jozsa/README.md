@@ -1,4 +1,4 @@
-Implementation of Deutsch-Jozsa Algorithm 
+<h1>Implementation of Deutsch-Jozsa Algorithm</h1> 
 
 To run the program : 
 
