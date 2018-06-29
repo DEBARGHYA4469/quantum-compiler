@@ -1,13 +1,13 @@
 # IMPLEMENTATION OF GROVER'S SEARCH ALGORITHM TO SEARCH A DATABASE CONTAINING N(here N=4) ELEMENTS BY QUERING ONLY O(sqrt(M/N)) 
 # WHERE M IS THE NO OF SOLUTIONS. HERE M < N/2 .
 
-#from connection import * 
+from connection import * 
 import numpy as np  
 from qiskit import QuantumCircuit,ClassicalRegister,QuantumRegister,QuantumJob
 from qiskit import available_backends,execute,register,get_backend
 from qiskit.tools.visualization import plot_histogram
 
-#backend = get_qc() # get the quantum computer with least jobs queued up 
+backend = get_qc() # get the quantum computer with least jobs queued up 
 
 def Swap(grov,x1,x2,q): # Swap lines x1 and x2 
 	grov.cx(q[x1],q[x2])
@@ -82,7 +82,7 @@ grov.h(q[2])
 grov.measure(q[0],c[0])
 grov.measure(q[1],c[1])
 
-backend = "local_qasm_simulator"
+#backend = "local_qasm_simulator"
 shots = 1000
 job = execute(grov,backend=backend,shots=shots)
 results=job.result()

@@ -11,7 +11,7 @@ import numpy as np
 
 
 
-print("\n-------------------SOLOVAY KITAEV ALGORITM TEST----------------------------\n") 
+print("\n-------------------SOLOVAY KITAEV ALGORITHM TEST----------------------------\n") 
 print("1.Press 1 for generating random unitary matrix \n 2.Press 2 to input a unitary matrix")
 
 def rotateZ(t):
