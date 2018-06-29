@@ -7,7 +7,7 @@ from Gates import *
 
 PI = math.acos(-1.0)  
 basic_gates_sequences = []
-l0 = 8 # CRASHES AFTER GATE SEQUENCE OF LENGTH 10 
+l0 = 13 # CRASHES AFTER GATE SEQUENCE OF LENGTH 10 
  
 #Creating a class to add a payload to the tuple object to be sent to kdtree 
 class Sequence(object): # class to hold the record of the matrix in SU(2) and its payload string 
@@ -30,14 +30,14 @@ def GenerateUtil(gates,prefix,n,l):
 		k = len(basic_gates_sequences)  
 		# tag the matrix to it
 		mat = np.array([[1,0],[0,1]])		
-		print(4**l0-k) # count down timer  
+		print(3**13-k) # count down timer  
 		for i in range(l0):
 			if(prefix[l0-i-1] == "H"): mat = np.matmul(H,mat) 
 			if(prefix[l0-i-1] == "T"): mat = np.matmul(T,mat)
-			if(prefix[l0-i-1] == "I"): mat = np.matmul(I,mat)	
+			#if(prefix[l0-i-1] == "I"): mat = np.matmul(I,mat)	
 			if(prefix[l0-i-1] == "S"): mat = np.matmul(S,mat)
-			if(prefix[l0-i-1] == "s"): mat = np.matmul(s,mat)
-			if(prefix[l0-i-1] == "t"): mat = np.matmul(t,mat)		 					
+			#if(prefix[l0-i-1] == "s"): mat = np.matmul(s,mat)
+			#if(prefix[l0-i-1] == "t"): mat = np.matmul(t,mat)		 					
 		
 			# Unroll the matrix and tuple it 
 		r1 = mat[0][0].real
@@ -61,7 +61,7 @@ def Generate_Sequences(gates,l):
 	GenerateUtil(gates,"",n,l)
 	
 #known_gates = ['H','I','T','S','s','t'] # Hadamard,Identity,Phase-gate and their adjoints..
-known_gates = ['H','I','T','S'] # Hadamard,Identity,Phase-gate 
+known_gates = ['H','T','S'] # Hadamard,Identity,Phase-gate 
 
  
 

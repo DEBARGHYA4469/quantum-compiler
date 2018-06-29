@@ -11,6 +11,6 @@ def SU2(U):
 	t  = complex(0,0) 
 	t = t + determinant(U)
 	globalPhase = (1/t)**0.5  
-	return U/globalPhase 
+	return U*globalPhase 
 
 #checked............................................................
