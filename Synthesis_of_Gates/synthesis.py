@@ -174,10 +174,11 @@ def kronecker(str): # find the kroncker product
 		if(str[i+1]=='1'): z = np.kron(z,np.array([[0],[1]])) 
 	print(z)	
 
-#u1 = np.identity(2)
+u1 = np.array([[0,1],[1,0]]) # Pauli-X
+u2 = np.array([[1,1],[1,-1]])/math.sqrt(2.0) # Hadamard
 #u2 = np.array([[1,1],[1,-1]])/math.sqrt(2.0)
-#u= np.kron(u1,u2)
-#u= np.kron(u,u1)
+u= np.kron(u2,u1)
+u= np.kron(u,u2)
 #u = np.array([[0,0,0,0,0,0,0,1],[0,0,0,0,0,0,1,0],[0,0,0,0,0,1,0,0],[0,0,0,0,1,0,0,0],[0,0,0,1,0,0,0,0],[0,0,1,0,0,0,0,0],[0,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0]])
 #u = np.identity(16)
 #for i in range(16):
@@ -186,7 +187,7 @@ def kronecker(str): # find the kroncker product
 #print(u)
 #kk = np.array([[1],[0],[0],[0],[0],[0],[0],[0]])
 #print(np.matmul(u,kk))
-#synth(u,16,4)
+synth(u,8,3)
 
 
 # test .....................2018 
