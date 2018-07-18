@@ -17,7 +17,7 @@ def swaper(ckt,ctr,tgt,q): # swap control and target bit
 #.................................................................
 
 #.........................................................n-Q Toffolli...................................................
-def nQ_tofolli(ckt,n,q): # always take first n-1 as ctr,n as tgt
+def nQ_tofolli(ckt,n,q): # always take first n-1 as ctr,n as tgt  
 	i = 0 	
 	anc = n # ancillas are from n to 2*n-1 
 	while(i < n-2):
@@ -41,7 +41,7 @@ def nQ_tofolli(ckt,n,q): # always take first n-1 as ctr,n as tgt
 #.......................................................n-Q Tofolli ......................................................	
 
 #................................................Controlled-U operations .................................................
-def Control_U(ckt,V_tilde,q,n):
+def Control_U(ckt,V_tilde,q,n): # n is no of qubits 		
 	i = 0 	
 	anc = n # ancillas are from n to 2*n-1 
 	while(i < n-2):

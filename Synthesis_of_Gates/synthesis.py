@@ -12,7 +12,9 @@ from graycode import *
 from nontrivial import *
 from qiskit import ClassicalRegister,QuantumRegister
 from qiskit import available_backends,execute,register
-from qiskit import get_backend,QuantumJob   
+from qiskit import get_backend,QuantumJob  
+from zy_decomposition import * 
+from control_U2 import *
 
 def dagger(U):
 	return U.conjugate().transpose()
@@ -58,6 +60,18 @@ def bitflip(gi,gj,n):  # checked..................................
 		if(gi[i] != gj[i]):
 			return i 
 
+def cUop2(ckt,V_tilde,q,n):
+	alpha,beta,gama,delta = zy_decompose(V_tilde) 
+	ckt = Rz(ckt,(delta-beta)/2.0,q,n) # Apply :: C 
+	ckt.cx(q[0],q[1]) # ancilla as ctr,tgt
+	ckt = Rz(ckt,-1.0*(beta+delta)/2.0,q,n)  # Apply :: B
+	ckt = Ry(ckt,-1.0*gama/2.0,q,n) # Apply :: B
+	ckt.cx(q[0],q[1]) # ancilla as ctr,tgt
+	ckt = Ry(ckt,gama/2.0,q,n) # Apply :: A
+	ckt = Rz(ckt,beta,q,n)  # Apply :: A
+	ckt.u1(alpha,q[0]) # phase to ancilla -> ref: N&C 	
+	return ckt	
+
 def synth(U,dim,nqubit): 
 		
 	q = QuantumRegister(2*nqubit-1)
@@ -99,7 +113,9 @@ def synth(U,dim,nqubit):
 				ckt = swaper(ckt,bflip,nqubit-1,q)
 			#	print("swap",bflip,nqubit-1)
 
-			ckt = nQ_tofolli(ckt,nqubit,q)	
+			if(nqubit ==2): ckt.cx(q[0],q[1])
+
+			if(nqubit > 2): ckt = nQ_tofolli(ckt,nqubit,q)	
 			#print("Toffoli")					
 			
 			if(bflip != nqubit-1):#not last bit flip	                                                          
@@ -123,8 +139,9 @@ def synth(U,dim,nqubit):
 
 		if(bflip != nqubit-1):#not last bit flip	                                                          
 			ckt = swaper(ckt,bflip,nqubit-1,q)
-
-		ckt = Control_U(ckt,V_tilde[block],q,nqubit)		
+		
+		if(nqubit == 2): ckt = cUop2(ckt,V_tilde,q,nqubit)
+		if(nqubit >  2): ckt = Control_U(ckt,V_tilde[block],q,nqubit)		
 
 		if(bflip != nqubit-1):#not last bit flip	                                                          
 			ckt = swaper(ckt,bflip,nqubit-1,q)
@@ -148,7 +165,10 @@ def synth(U,dim,nqubit):
 			if(bflip != nqubit-1):#not last bit flip	                                                          
 				ckt = swaper(ckt,bflip,nqubit-1,q)
 			
-			ckt = nQ_tofolli(ckt,nqubit,q)						
+			if(nqubit ==2): ckt.cx(q[0],q[1])
+
+			if(nqubit > 2): ckt = nQ_tofolli(ckt,nqubit,q)	
+			#print("Toffoli")						
 			
 			if(bflip != nqubit-1):#not last bit flip	                                                          
 				ckt = swaper(ckt,bflip,nqubit-1,q)
@@ -174,11 +194,39 @@ def kronecker(str): # find the kroncker product
 		if(str[i+1]=='1'): z = np.kron(z,np.array([[0],[1]])) 
 	print(z)	
 
-u1 = np.array([[0,1],[1,0]]) # Pauli-X
-u2 = np.array([[1,1],[1,-1]])/math.sqrt(2.0) # Hadamard
+
+
+def handle_1Qgates(U,dim,n):
+
+	q = QuantumRegister(n)
+	c = ClassicalRegister(n)
+	ckt = QuantumCircuit(q,c)
+	
+	alpha,beta,gama,delta = zy_decompose(U) # decompose 
+ 
+	ckt = Rz(ckt,(delta-beta)/2.0,q,n) # Apply :: C 
+	ckt.x(q[0]) # ancilla as ctr,tgt
+	ckt = Rz(ckt,-1.0*(beta+delta)/2.0,q,n)  # Apply :: B
+	ckt = Ry(ckt,-1.0*gama/2.0,q,n) # Apply :: B
+	ckt.x(q[0]) # ancilla as ctr,tgt
+	ckt = Ry(ckt,gama/2.0,q,n) # Apply :: A
+	ckt = Rz(ckt,beta,q,n)  # Apply :: A
+	ckt.u1(alpha,q[0]) # phase to ancilla -> ref: N&C 
+	
+	for i in range(n):
+		ckt.measure(q[i],c[i])
+
+	get_result(ckt)
+
+
+#u1 = np.array([[0,1],[1,0]]) # Pauli-X
+#u2 = np.array([[1,1],[1,-1]])/math.sqrt(2.0) # Hadamard
 #u2 = np.array([[1,1],[1,-1]])/math.sqrt(2.0)
-u= np.kron(u2,u1)
-u= np.kron(u,u2)
+#u= np.kron(u1,u1)
+#u= np.kron(u,u1)
+#u = unitary()
+#u= np.kron(u,u2)
+#u= np.kron(u,u2)
 #u = np.array([[0,0,0,0,0,0,0,1],[0,0,0,0,0,0,1,0],[0,0,0,0,0,1,0,0],[0,0,0,0,1,0,0,0],[0,0,0,1,0,0,0,0],[0,0,1,0,0,0,0,0],[0,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0]])
 #u = np.identity(16)
 #for i in range(16):
@@ -187,7 +235,7 @@ u= np.kron(u,u2)
 #print(u)
 #kk = np.array([[1],[0],[0],[0],[0],[0],[0],[0]])
 #print(np.matmul(u,kk))
-synth(u,8,3)
+#synth(u,8,3)
 
 
 # test .....................2018 
