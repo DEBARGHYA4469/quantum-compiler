@@ -1,7 +1,6 @@
 # Quantum-Compiler
 
-This is a research implementation of SOLOVAY-KITAEV ALGORITHM.
-This project is incomplete 
+This is a tool for synthesizing arbitrary unitary matrix( quantum gate) using the library set of gate in ibmq.We also provide the fault-tolerant construction of single qubit unitaries by Solovay-Kitaev algorithm.
 
 Run the code to execute the program
 
